@@ -1,6 +1,6 @@
 from game_object import GameObject
 class Obstacle(GameObject):
-    def __init__(self, x, y, width, height, color, speed, direction):
+    def __init__(self, x, y, width, height, speed, direction, color):
         super(). __init__(x, y, width, height, color)
         self.speed = speed
         self.direction = direction
