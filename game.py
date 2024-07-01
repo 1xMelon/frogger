@@ -1,8 +1,10 @@
 import pygame
+import random
 from frog import Frog
 from obstacle import Obstacle
 from game_object import GameObject
 from log import Log
+from fly import Fly
 class Game:
     def __init__(self):
         pygame.init()
@@ -21,6 +23,7 @@ class Game:
         self.goal2 = GameObject(300,0,150,150, (255, 255, 0))
         self.goal3 = GameObject(500,0,150,150, (255, 255, 0))
         self.goal4 = GameObject(1000-150,0,150,150, (255, 255, 0))
+        self.fly = Fly(0, 0, 50, 50, (0,0,0))
         self.clock = pygame.time.Clock()
         self.fps = 60
         self.game_loop()
@@ -50,6 +53,7 @@ class Game:
             self.clock.tick(self.fps)
             self.event_handler()
             self.frog.update()
+            self.check_on_log()
             self.check_game_over()
             self.obstacle1.move()
             self.obstacle2.move()
@@ -103,12 +107,16 @@ class Game:
         if self.log3.hitbox.colliderect(self.frog.hitbox):
             game_over = False
         if self.goal1.hitbox.colliderect(self.frog.hitbox):
+            game_over = False
             win = True
         if self.goal2.hitbox.colliderect(self.frog.hitbox):
+            game_over = False
             win = True
         if self.goal3.hitbox.colliderect(self.frog.hitbox):
+            game_over = False
             win = True
         if self.goal4.hitbox.colliderect(self.frog.hitbox):
+            game_over = False
             win = True
 
         if game_over == True:
@@ -116,3 +124,21 @@ class Game:
             quit()
         if win == True:
             pass
+
+    def check_on_log(self):
+        on = False
+        if self.log.hitbox.colliderect(self.frog.hitbox):
+            on = True
+            curr_log = self.log
+        if self.log2.hitbox.colliderect(self.frog.hitbox):
+            on = True
+            curr_log = self.log2
+        if self.log3.hitbox.colliderect(self.frog.hitbox):
+            on = True
+            curr_log = self.log3
+
+        if on == True:
+            if curr_log.direction == "right":
+                self.frog.x += curr_log.speed
+            if curr_log.direction == "left":
+                self.frog.x -= curr_log.speed
