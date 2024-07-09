@@ -16,4 +16,4 @@ class Log(GameObject):
         elif self.x >= 1000 - self.width:
             self.direction = "left"
 
-        print(self.direction)
+        #print(self.direction)

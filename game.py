@@ -23,7 +23,9 @@ class Game:
         self.goal2 = GameObject(300,0,150,150, (255, 255, 0))
         self.goal3 = GameObject(500,0,150,150, (255, 255, 0))
         self.goal4 = GameObject(1000-150,0,150,150, (255, 255, 0))
-        self.fly = Fly(0, 0, 50, 50, (0,0,0))
+        self.fly = Fly(55, 50, 30, 30, (0,0,0))
+        self.spawn_event = pygame.event.custom_type()
+        pygame.time.set_timer(self.spawn_event, random.randint(500, 1000), 1)
         self.clock = pygame.time.Clock()
         self.fps = 60
         self.game_loop()
@@ -46,6 +48,10 @@ class Game:
                         self.frog.y -= self.frog.speed
                 elif event.key == pygame.K_DOWN or event.key == pygame.K_s:
                     self.frog.y += self.frog.speed
+            if event.type == self.spawn_event:
+                self.fly.teleport()
+                pygame.time.set_timer(self.spawn_event, random.randint(500, 1000), 1)
+                
     
 
     def game_loop(self):
@@ -67,7 +73,7 @@ class Game:
             self.log.update()
             self.log2.update()
             self.log3.update()
-
+            self.fly.update()
             self.draw()
             pygame.display.update()
 
@@ -79,6 +85,7 @@ class Game:
         self.goal2.draw(self.window)
         self.goal3.draw(self.window)
         self.goal4.draw(self.window)
+        self.fly.draw(self.window)
         self.safe_zone.draw(self.window)
         self.obstacle1.draw(self.window)
         self.obstacle2.draw(self.window)
