@@ -24,19 +24,11 @@ class Game:
         self.goal2 = GameObject(300,0,150,150, (255, 255, 0))
         self.goal3 = GameObject(500,0,150,150, (255, 255, 0))
         self.goal4 = GameObject(1000-150,0,150,150, (255, 255, 0))
-<<<<<<< Updated upstream
         self.fly = Fly(55, 50, 30, 30, (0,0,0))
         self.spawn_event = pygame.event.custom_type()
         pygame.time.set_timer(self.spawn_event, random.randint(500, 1000), 1)
-=======
-<<<<<<< HEAD
-        self.fly = Fly(55, 120, 30, 30, (0,0,0))
-=======
-        self.fly = Fly(55, 50, 30, 30, (0,0,0))
         self.spawn_event = pygame.event.custom_type()
         pygame.time.set_timer(self.spawn_event, random.randint(500, 1000), 1)
->>>>>>> e6b23c057e0757b4a349d09cc98e151f6d62cfbd
->>>>>>> Stashed changes
         self.clock = pygame.time.Clock()
         self.fps = 60
         self.game_loop()
@@ -67,6 +59,7 @@ class Game:
             self.event_handler()
             self.frog.update()
             self.check_on_log()
+            self.fly.check_on_fly(self.frog, self.goal1, self.goal2, self.goal3, self.goal4)
             self.check_game_over()
             self.obstacle1.move()
             self.obstacle2.move()
@@ -80,14 +73,8 @@ class Game:
             self.log.update()
             self.log2.update()
             self.log3.update()
-<<<<<<< Updated upstream
             self.fly.update()
-=======
-<<<<<<< HEAD
-=======
             self.fly.update()
->>>>>>> e6b23c057e0757b4a349d09cc98e151f6d62cfbd
->>>>>>> Stashed changes
             self.draw()
             pygame.display.update()
 
