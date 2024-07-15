@@ -25,6 +25,8 @@ class Game:
         self.goal3 = GameObject(500,0,150,150, (255, 255, 0))
         self.goal4 = GameObject(1000-150,0,150,150, (255, 255, 0))
         self.fly = Fly(55, 50, 30, 30, (0,0,0))
+        self.locked_flys = []
+        self.goal_positions = [(55,50), (355,50), (555,50), (905,50)]
         self.spawn_event = pygame.event.custom_type()
         pygame.time.set_timer(self.spawn_event, random.randint(500, 1000), 1)
         self.spawn_event = pygame.event.custom_type()
@@ -49,7 +51,7 @@ class Game:
                 elif event.key == pygame.K_DOWN or event.key == pygame.K_s:
                     self.frog.y += self.frog.speed
             if event.type == self.spawn_event:
-                self.fly.teleport()
+                self.fly.teleport(self.goal_positions)
                 pygame.time.set_timer(self.spawn_event, random.randint(500, 1000), 1)
                 
     
@@ -59,7 +61,7 @@ class Game:
             self.event_handler()
             self.frog.update()
             self.check_on_log()
-            self.fly.check_on_fly(self.frog, self.goal1, self.goal2, self.goal3, self.goal4)
+            self.check_on_fly()
             self.check_game_over()
             self.obstacle1.move()
             self.obstacle2.move()
@@ -95,6 +97,8 @@ class Game:
         self.log2.draw(self.window)
         self.log3.draw(self.window)
         self.frog.draw(self.window)
+        for fly in self.locked_flys:
+            fly.draw(self.window)
         pygame.display.update()
 
     def check_game_over(self):
@@ -150,3 +154,13 @@ class Game:
                 self.frog.x += curr_log.speed
             if curr_log.direction == "left":
                 self.frog.x -= curr_log.speed
+
+    def check_on_fly(self):
+        if self.fly.hitbox.colliderect(self.frog.hitbox):
+            position = (self.fly.x, self.fly.y)
+            self.goal_positions.remove(position)
+            self.fly.locked = True
+            self.fly.color = (160,32,240)
+            self.locked_flys.append(self.fly)
+            self.fly = Fly(55, 50, 30, 30, (0,0,0))
+            self.fly.teleport(self.goal_positions)
